@@ -1,20 +1,51 @@
-versio: 2.1
+version: 2.1
 
-orbs: 
-  node: circleci/node@1.1
-
-
-jobs:
-  build:
-    executor:
-      name: node/default
-      tag: "10.4"
+jobs: 
+  one:
+    docker:
+      - image: circleci/ruby:2.4.1
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
     steps:
-      -checkout
-      - node/with-cache:
-        steps:
-          - run: npm install
-      - run: npm run test
+      - checkout
+      - run: echo "hello there!"
+      - run: sleep 25
+  two:
+    docker:
+      - image: circleci/ruby:2.4.1
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run: echo "General Kenobi!"
+      - run: sleep 15
+
+workflows: 
+  version: 2.1
+  one_and_two:
+    jobs:
+      -one
+      -two
+
+# version: 2.1
+
+# orbs: 
+#   node: circleci/node@1.1
+
+
+# jobs:
+#   build:
+#     executor:
+#       name: node/default
+#       tag: "10.4"
+#     steps:
+#       -checkout
+#       - node/with-cache:
+#         steps:
+#           - run: npm install
+#       - run: npm run test
 
 
 
